@@ -1,0 +1,25 @@
+/:
+  controller: Base
+  action: index
+
+/contact:
+  controller: Base
+  action: contact
+
+
+/mon-super-portfolio:
+  controller: Base
+  action: portfolio
+
+
+/login:
+  controller: Auth
+  action: login
+
+/logout:
+    controller: Auth
+    action: logout
+
+/register:
+  controller: Auth
+  action: register
