@@ -5,12 +5,11 @@
     </head>
     <body>
         <h1>Welcome to the Frontoffice</h1>
-        <p>This is the WEBSITE</p>
 
         <?php include $this->viewPath;?>
 
         <footer>
-            <marquee>© Skrzypczyk</marquee>
+            <marquee>mini WordPress</marquee>
         </footer>
     </body>
 </html>

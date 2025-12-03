@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: php-apache
+    container_name: php-apache-perso
     ports:
       - "8080:80"             # Accès HTTP à Apache -> http://localhost:8080
     volumes:
@@ -15,10 +15,11 @@ services:
       - APACHE_LOG_DIR=/var/log/apache2
     depends_on:
       - db
+      - mailhog
 
   db:
     image: postgres:15-alpine
-    container_name: pg-db
+    container_name: pg-db-perso
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -31,7 +32,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:7
-    container_name: pgadmin
+    container_name: pgadmin-perso
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
@@ -42,6 +43,16 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
       - db
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog-perso
+    restart: unless-stopped
+    ports:
+      - "1025:1025"           # Port SMTP
+      - "8025:8025"           # Interface web -> http://localhost:8025
+    logging:
+      driver: none            # Désactiver les logs pour ne pas polluer
 
 volumes:
   pgdata:

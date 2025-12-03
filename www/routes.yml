@@ -11,15 +11,30 @@
   controller: Base
   action: portfolio
 
-
 /login:
   controller: Auth
   action: login
 
 /logout:
-    controller: Auth
-    action: logout
+  controller: Auth
+  action: logout
 
 /register:
   controller: Auth
   action: register
+
+/validate:
+  controller: Auth
+  action: validate
+
+/forgot-password:
+  controller: Auth
+  action: forgotPassword
+
+/reset-password:
+  controller: Auth
+  action: resetPassword
+
+/test-db:
+  controller: Base
+  action: testDb
