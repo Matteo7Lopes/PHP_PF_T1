@@ -29,14 +29,8 @@ class Base
      */
     public function contact(): void
     {
-        echo "<h1>Page Contact</h1>";
-        echo "<p>Cette page est publique.</p>";
-
-        if (isset($_SESSION['user_id'])) {
-            echo "<p>Connecté en tant que : " . htmlspecialchars($_SESSION['user_firstname']) . "</p>";
-        } else {
-            echo "<p><a href='/login'>Se connecter</a></p>";
-        }
+        $render = new Render("contact", "frontoffice");
+        $render->render();
     }
 
     /**
@@ -44,19 +38,16 @@ class Base
      */
     public function portfolio(): void
     {
-        echo "<h1>Mon Portfolio</h1>";
-        echo "<p>Bienvenue sur mon portfolio.</p>";
-
-        if (isset($_SESSION['user_id'])) {
-            echo "<p>Connecté : " . htmlspecialchars($_SESSION['user_firstname']) . "</p>";
-        }
+        $render = new Render("portfolio", "frontoffice");
+        $render->render();
     }
 
     /**
-     * Test de connexion à la base de données
+     * Test de connexion à la base de données - PROTÉGÉE (nécessite connexion admin)
      */
     public function testDb(): void
     {
+    \App\Controllers\Auth::requireAdmin();
         try {
             $db = \App\Core\Database::getInstance();
             $pdo = $db->getPdo();

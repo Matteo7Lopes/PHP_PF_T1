@@ -22,11 +22,11 @@ if ($success):
         <label for="email">Email :</label>
         <input type="email" id="email" name="email" required><br>
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" required minlength="8"><br>
+        <label for="pwd ">Mot de passe :</label>
+        <input type="password" id="pwd" name="pwd" required minlength="8"><br>
 
-        <label for="confirm_password">Confirmer le mot de passe :</label>
-        <input type="password" id="confirm_password" name="confirm_password" required minlength="8"><br>
+        <label for="pwdConfirm">Confirmer le mot de passe :</label>
+        <input type="password" id="pwdConfirm" name="pwdConfirm" required minlength="8"><br>
 
         <button type="submit">S'inscrire</button>
     </form>

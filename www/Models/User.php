@@ -14,7 +14,7 @@ class User {
      * Créer un nouvel utilisateur
      * @return array|false Retourne ['user_id' => int, 'token' => string] ou false en cas d'erreur
      */
-    public function create(string $email, string $password, string $firstname, string $lastname, int $roleId = 2): array|false {
+    public function create(string $email, string $password, string $firstname, string $lastname, int $roleId = 2): array {
         try {
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             $token = bin2hex(random_bytes(32));
@@ -60,7 +60,7 @@ class User {
             if (defined('DEBUG_MODE') && DEBUG_MODE) {
                 error_log("Erreur création utilisateur: " . $e->getMessage());
             }
-            return false;
+            return [];
         }
     }
 

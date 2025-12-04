@@ -56,45 +56,55 @@ class Auth
      */
     public function register(): void
     {
+
         // Rediriger si déjà connecté
         self::requireGuest();
 
         $errors = [];
         $success = false;
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Récupération et nettoyage des données
-            $firstname = trim($_POST['firstname'] ?? '');
-            $lastname = trim($_POST['lastname'] ?? '');
-            $email = trim($_POST['email'] ?? '');
-            $password = $_POST['password'] ?? '';
-            $confirmPassword = $_POST['confirm_password'] ?? '';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'
+            && count($_POST)==5
+            && isset($_POST["firstname"])
+            && isset($_POST["lastname"])
+            && !empty($_POST["email"])
+            && !empty($_POST["pwd"])
+            && !empty($_POST["pwdConfirm"])
+        ) {
 
-            // Validation
-            if (empty($firstname)) {
-                $errors[] = "Le prénom est requis";
-            }
-            if (empty($lastname)) {
-                $errors[] = "Le nom est requis";
-            }
-            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "Email invalide";
-            }
-            if (strlen($password) < 8) {
-                $errors[] = "Le mot de passe doit contenir au moins 8 caractères";
-            }
-            if ($password !== $confirmPassword) {
-                $errors[] = "Les mots de passe ne correspondent pas";
-            }
+            $firstname = ucwords(strtolower(trim($_POST["firstname"])));
+            $lastname = strtoupper(trim($_POST["lastname"]));
+            $email = strtolower(trim($_POST["email"]));
 
-            // Vérifier si l'email existe déjà
-            if (empty($errors) && $this->userModel->findByEmail($email)) {
-                $errors[] = "Cet email est déjà utilisé";
+
+            if(strlen($firstname)==1){
+                $errors[]="Le prénom doit faire au moins 2 caractères";
+            }
+            if(strlen($lastname)==1){
+                $errors[]="Le nom doit faire au moins 2 caractères";
+            }
+            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $errors[]="Le format de l'email est invalide";
+            }elseif(!empty($this->userModel->findByEmail($email))){
+                $result = $this->userModel->findByEmail($email);
+                if(!empty($result)){
+                    $errors[]="L'email existe déjà";
+                }
+            }
+            if(strlen($_POST["pwd"])<8 ||
+                !preg_match('#[A-Z]#', $_POST["pwd"]) ||
+                !preg_match('#[a-z]#', $_POST["pwd"]) ||
+                !preg_match('#[0-9]#', $_POST["pwd"])
+            ){
+                $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule et un chiffres";
+            }
+            if($_POST["pwd"] != $_POST["pwdConfirm"]){
+                $errors[]="Le mot de passe de confirmation ne correspond pas";
             }
 
             // Créer l'utilisateur
             if (empty($errors)) {
-                $result = $this->userModel->create($email, $password, $firstname, $lastname);
+                $result = $this->userModel->create($email, $_POST["pwd"], $firstname, $lastname);
 
                 if ($result) {
                     // Envoyer l'email de confirmation
@@ -166,7 +176,6 @@ class Auth
                 $errors[] = "Email et mot de passe requis";
             } else {
                 $user = $this->userModel->checkCredentials($email, $password);
-
                 if ($user) {
                     if (!$user['is_active']) {
                         $errors[] = "Votre compte n'est pas encore activé. Vérifiez vos emails.";
@@ -262,11 +271,16 @@ class Auth
             $password = $_POST['password'] ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
 
-            if (strlen($password) < 8) {
-                $errors[] = "Le mot de passe doit contenir au moins 8 caractères";
+            if(strlen($password)<8 ||
+                !preg_match('#[A-Z]#', $_POST["pwd"]) ||
+                !preg_match('#[a-z]#', $_POST["pwd"]) ||
+                !preg_match('#[0-9]#', $_POST["pwd"])
+            ){
+                $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule et un chiffres";
             }
-            if ($password !== $confirmPassword) {
-                $errors[] = "Les mots de passe ne correspondent pas";
+
+            if($password != $confirmPassword){
+                $errors[]="Le mot de passe de confirmation ne correspond pas";
             }
 
             if (empty($errors)) {

@@ -7,7 +7,7 @@
   action: contact
 
 
-/mon-super-portfolio:
+/portfolio:
   controller: Base
   action: portfolio
 
@@ -34,6 +34,10 @@
 /reset-password:
   controller: Auth
   action: resetPassword
+
+/admin:
+  controller: Admin
+  action: dashboard
 
 /test-db:
   controller: Base
