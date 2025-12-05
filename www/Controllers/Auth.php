@@ -268,13 +268,13 @@ class Auth
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($token)) {
-            $password = $_POST['password'] ?? '';
-            $confirmPassword = $_POST['confirm_password'] ?? '';
+            $password = $_POST['pwd'] ?? '';
+            $confirmPassword = $_POST['pwdConfirm'] ?? '';
 
             if(strlen($password)<8 ||
-                !preg_match('#[A-Z]#', $_POST["pwd"]) ||
-                !preg_match('#[a-z]#', $_POST["pwd"]) ||
-                !preg_match('#[0-9]#', $_POST["pwd"])
+                !preg_match('#[A-Z]#', $password) ||
+                !preg_match('#[a-z]#', $password) ||
+                !preg_match('#[0-9]#', $password)
             ){
                 $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule et un chiffres";
             }

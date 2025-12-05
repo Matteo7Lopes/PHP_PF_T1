@@ -20,11 +20,11 @@ if ($success):
         <a href="/forgot-password">Demander un nouveau lien</a>
 <?php else: ?>
         <form method="post">
-            <label for="password">Nouveau mot de passe :</label>
-            <input type="password" id="password" name="password" required minlength="8"><br>
+            <label for="pwd">Nouveau mot de passe :</label>
+            <input type="password" id="pwd" name="pwd" required minlength="8"><br>
 
-            <label for="confirm_password">Confirmer le mot de passe :</label>
-            <input type="password" id="confirm_password" name="confirm_password" required minlength="8"><br>
+            <label for="pwdConfirm">Confirmer le mot de passe :</label>
+            <input type="password" id="pwdConfirm" name="pwdConfirm" required minlength="8"><br>
 
             <button type="submit">Réinitialiser</button>
         </form>

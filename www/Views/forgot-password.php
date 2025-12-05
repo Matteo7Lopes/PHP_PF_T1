@@ -4,7 +4,7 @@ $success = ($success ?? 'false') === 'true';
 
 if ($success):
 ?>
-    <p>Si votre email existe, vous recevrez un lien de réinitialisation.</p>
+    <p>vous recevrez un lien de réinitialisation.</p>
     <a href="/login">Retour à la connexion</a>
 <?php else:
     if (!empty($errors)) {
