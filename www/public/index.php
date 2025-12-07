@@ -30,38 +30,51 @@ $requestUri = strtolower($requestUri);
 // Charger les routes
 $routes = yaml_parse_file("../routes.yml");
 
-// Vérifier que l'uri existe dans les routes
-if(empty($routes[$requestUri])){
-    http_response_code(404);
-    die("Aucune route pour cette uri : page 404");
+// Vérifier si l'URI correspond à une route statique
+if(!empty($routes[$requestUri])){
+    // Route statique trouvée
+    if(empty($routes[$requestUri]["controller"]) || empty($routes[$requestUri]["action"])){
+        http_response_code(404);
+        die("Aucun controller ou action pour cette uri : page 404");
+    }
+
+    $controller = $routes[$requestUri]["controller"];
+    $action = $routes[$requestUri]["action"];
+
+    if(!file_exists("../Controllers/".$controller.".php")){
+        http_response_code(500);
+        die("Aucun fichier controller pour cette uri");
+    }
+
+    include "../Controllers/".$controller.".php";
+
+    $controller = "App\\Controllers\\".$controller;
+    if(!class_exists($controller)){
+        http_response_code(500);
+        die("La classe du controller n'existe pas");
+    }
+
+    $objetController = new $controller();
+
+    if(!method_exists($objetController, $action)){
+        http_response_code(500);
+        die("La methode du controller n'existe pas");
+    }
+
+    $objetController->$action();
+
+} else {
+    // Pas de route statique, chercher une page dynamique
+    $slug = ltrim($requestUri, '/');
+
+    // Si le slug est vide, rediriger vers /
+    if(empty($slug)){
+        http_response_code(404);
+        die("Page non trouvée");
+    }
+
+    // Charger le controller de pages dynamiques
+    include_once "../Controllers/DynamicPage.php";
+    $dynamicController = new \App\Controllers\DynamicPage();
+    $dynamicController->show($slug);
 }
-
-if(empty($routes[$requestUri]["controller"]) || empty($routes[$requestUri]["action"])){
-    http_response_code(404);
-    die("Aucun controller ou action pour cette uri : page 404");
-}
-
-$controller = $routes[$requestUri]["controller"];
-$action = $routes[$requestUri]["action"];
-
-if(!file_exists("../Controllers/".$controller.".php")){
-    http_response_code(500);
-    die("Aucun fichier controller pour cette uri");
-}
-
-include "../Controllers/".$controller.".php";
-
-$controller = "App\\Controllers\\".$controller;
-if(!class_exists($controller)){
-    http_response_code(500);
-    die("La classe du controller n'existe pas");
-}
-
-$objetController = new $controller();
-
-if(!method_exists($objetController, $action)){
-    http_response_code(500);
-    die("La methode du controller n'existe pas");
-}
-
-$objetController->$action();

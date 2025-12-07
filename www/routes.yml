@@ -6,11 +6,11 @@
   controller: Base
   action: contact
 
-
-/portfolio:
+/mon-super-portfolio:
   controller: Base
   action: portfolio
 
+# Routes d'authentification
 /login:
   controller: Auth
   action: login
@@ -35,10 +35,40 @@
   controller: Auth
   action: resetPassword
 
+# Routes admin
 /admin:
   controller: Admin
   action: dashboard
 
+/admin/users:
+  controller: AdminUsers
+  action: list
+
+/admin/users/edit:
+  controller: AdminUsers
+  action: edit
+
+/admin/users/delete:
+  controller: AdminUsers
+  action: delete
+
+/admin/pages:
+  controller: AdminPages
+  action: list
+
+/admin/pages/create:
+  controller: AdminPages
+  action: create
+
+/admin/pages/edit:
+  controller: AdminPages
+  action: edit
+
+/admin/pages/delete:
+  controller: AdminPages
+  action: delete
+
+# Route de test
 /test-db:
   controller: Base
   action: testDb

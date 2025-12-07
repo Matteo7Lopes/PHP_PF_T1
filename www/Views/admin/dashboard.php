@@ -14,6 +14,8 @@ $latest_users = json_decode($latest_users ?? '[]', true);
 <hr>
 
 <h2>Navigation</h2>
+<a href="/admin/users">Gérer les utilisateurs</a><br>
+<a href="/admin/pages">Gérer les pages</a><br>
 <a href="/">Retour au site</a><br>
 <a href="/logout">Déconnexion</a>
 
@@ -25,9 +27,9 @@ $latest_users = json_decode($latest_users ?? '[]', true);
 <?php else: ?>
     <?php foreach ($latest_users as $user): ?>
         <p>
-            <?= htmlspecialchars($user['firstname']) ?>
-            <?= htmlspecialchars($user['lastname']) ?>
-            (<?= htmlspecialchars($user['email']) ?>)
+            <?= htmlspecialchars($user['firstname']) ?> 
+            <?= htmlspecialchars($user['lastname']) ?> 
+            (<?= htmlspecialchars($user['email']) ?>) 
             - <?= $user['date_created'] ?>
         </p>
     <?php endforeach; ?>
