@@ -94,9 +94,10 @@ class Auth
             if(strlen($_POST["pwd"])<8 ||
                 !preg_match('#[A-Z]#', $_POST["pwd"]) ||
                 !preg_match('#[a-z]#', $_POST["pwd"]) ||
-                !preg_match('#[0-9]#', $_POST["pwd"])
+                !preg_match('#[0-9]#', $_POST["pwd"]) ||
+                !preg_match("#[^a-zA-Z0-9\s]#", $_POST["pwd"])
             ){
-                $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule et un chiffres";
+                $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule, un chiffre et un caractère spécial";
             }
             if($_POST["pwd"] != $_POST["pwdConfirm"]){
                 $errors[]="Le mot de passe de confirmation ne correspond pas";
