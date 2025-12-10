@@ -36,7 +36,6 @@ class AdminPages
         Auth::requireAdmin();
 
         $errors = [];
-        $success = false;
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST'
             && (count($_POST) == 4 || count($_POST) == 3)
@@ -48,7 +47,7 @@ class AdminPages
             $content = trim($_POST['content'] ?? '');
             $metaDescription = trim($_POST['meta_description'] ?? '');
             $isPublished = isset($_POST['is_published']);
-
+            $slug = null;
             // Validation
             if (empty($title)) {
                 $errors[] = "Le titre est requis";
@@ -56,7 +55,9 @@ class AdminPages
                 // Générer le slug
                 $slug = $this->pageModel->generateSlug($title);
             }
-
+            if (empty($slug)) {
+                $errors[] = "le titre ne doit pas être composé uniquement de caractères spéciaux ";
+            }
             if (empty($errors)) {
 
                 $data = [
@@ -113,14 +114,14 @@ class AdminPages
             && isset($_POST["content"])
             && isset($_POST["meta_description"])) {
 
-
+            $slug = preg_replace('/[^a-zA-Z0-9]/', '',$_POST["slug"]);
             // Traitement du formulaire
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $data = [
-                    'title' => trim($_POST['title'] ?? ''),
-                    'slug' => trim($_POST['slug'] ?? ''),
-                    'content' => trim($_POST['content'] ?? ''),
-                    'meta_description' => trim($_POST['meta_description'] ?? ''),
+                    'title' => trim($_POST['title']),
+                    'slug' => $slug,
+                    'content' => trim($_POST['content']),
+                    'meta_description' => trim($_POST['meta_description']),
                     'is_published' => isset($_POST['is_published'])
                 ];
 
@@ -129,7 +130,7 @@ class AdminPages
                     $errors[] = "Le titre est requis";
                 }
                 if (empty($data['slug'])) {
-                    $errors[] = "Le slug est requis";
+                    $errors[] = "Le slug est requis et ne doit pas être composé uniquement de caractères spéciaux";
                 }
                 if (!empty($this->pageModel->findAllBySlug($data['slug']))) {
                     if ($data['slug'] != $page["slug"]) {

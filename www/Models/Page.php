@@ -110,6 +110,7 @@ class Page
             $stmt = $this->pdo->prepare($sql);
 
             $stmt->bindValue(':title', $data['title']);
+
             $stmt->bindValue(':slug', $data['slug']);
             $stmt->bindValue(':content', $data['content']);
             $stmt->bindValue(':meta_description', $data['meta_description']);
@@ -150,9 +151,7 @@ class Page
     {
         // Convertir en slug
         $slug = strtolower(trim($title));
-        $slug = preg_replace('/[^a-z0-9-]/', '-', $slug);
-        $slug = preg_replace('/-+/', '-', $slug);
-        $slug = trim($slug, '-');
+        $slug = preg_replace('/[^a-zA-Z0-9]/', '', $slug);
 
         // Vérifier l'unicité
         $originalSlug = $slug;
@@ -176,5 +175,6 @@ class Page
             $counter++;
         }
     }
+
 }
 
