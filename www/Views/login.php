@@ -19,3 +19,8 @@ if (!empty($errors)) {
 
 <a href="/forgot-password">Mot de passe oublié ?</a><br>
 <a href="/register">Créer un compte</a>
+<hr>
+<p> Pages accessibles sans connexion :</p>
+
+<a href="/portfolio">Portfolio</a><br>
+<a href="/contact">Contact</a>
