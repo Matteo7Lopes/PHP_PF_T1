@@ -15,8 +15,8 @@ $users = json_decode($users ?? '[]', true);
 <?php else: ?>
     <?php foreach ($users as $user): ?>
         <p>
-            <strong><?= htmlspecialchars($user['firstname']) ?> <?= htmlspecialchars($user['lastname']) ?></strong><br>
-            Email : <?= htmlspecialchars($user['email']) ?><br>
+            <strong><?= $user['firstname'] ?> <?= $user['lastname'] ?></strong><br>
+            Email : <?= $user['email'] ?><br>
             Rôle : <?= $user['role_id'] == 1 ? 'Admin' : 'User' ?><br>
             Statut : <?= $user['is_active'] ? 'Actif' : 'Inactif' ?><br>
             Créé le : <?= $user['date_created'] ?><br>

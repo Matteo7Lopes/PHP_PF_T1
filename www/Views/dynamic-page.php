@@ -20,3 +20,8 @@ $page = json_decode($page ?? '{}', true);
 <?php if (!empty($page['updated_at'])): ?>
     <p><small>Mis à jour le : <?= $page['updated_at'] ?></small></p>
 <?php endif; ?>
+
+<a href="/pages">list des pages</a><br>
+<?php if ($_SESSION['user_role_id'] == 1): ?>
+    <a href="/admin/pages">Gérer les pages</a><br>
+<?php endif; ?>

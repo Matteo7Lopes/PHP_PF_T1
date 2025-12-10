@@ -6,9 +6,13 @@
   controller: Base
   action: contact
 
-/mon-super-portfolio:
+/portfolio:
   controller: Base
   action: portfolio
+
+/pages:
+  controller: Pages
+  action: list
 
 # Routes d'authentification
 /login:

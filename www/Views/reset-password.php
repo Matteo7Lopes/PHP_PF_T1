@@ -1,6 +1,6 @@
 <?php
 $errors = json_decode($errors ?? '[]', true);
-$success = ($success ?? 'false') === 'true';
+$success = ($success ?? 'false') == 'true';
 $token = $token ?? '';
 
 if ($success):

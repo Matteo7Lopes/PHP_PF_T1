@@ -1,5 +1,5 @@
 <?php
-$success = ($success ?? 'false') === 'true';
+$success = ($success ?? 'false') == 'true';
 $message = $message ?? '';
 
 if ($success):

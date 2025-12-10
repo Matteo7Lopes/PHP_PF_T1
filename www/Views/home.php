@@ -9,5 +9,6 @@ if ($_SESSION['user_role_id'] == 1) { ?>
 <?php } ?>
 <a href="/contact">Contact</a><br>
 <a href="/portfolio">Portfolio</a><br>
+<a href="/pages">list des pages</a><br>
 <a href="/logout">Déconnexion</a>
 

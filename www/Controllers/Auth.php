@@ -168,7 +168,7 @@ class Auth
 
         $errors = [];
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
 
@@ -223,7 +223,7 @@ class Auth
         $errors = [];
         $success = false;
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = trim($_POST['email'] ?? '');
 
             if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -267,7 +267,7 @@ class Auth
             $errors[] = "Token invalide";
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($token)) {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($token)) {
             $password = $_POST['pwd'] ?? '';
             $confirmPassword = $_POST['pwdConfirm'] ?? '';
 

@@ -27,9 +27,9 @@ $latest_users = json_decode($latest_users ?? '[]', true);
 <?php else: ?>
     <?php foreach ($latest_users as $user): ?>
         <p>
-            <?= htmlspecialchars($user['firstname']) ?> 
-            <?= htmlspecialchars($user['lastname']) ?> 
-            (<?= htmlspecialchars($user['email']) ?>) 
+            <?= $user['firstname'] ?>
+            <?= $user['lastname'] ?>
+            (<?= $user['email'] ?>)
             - <?= $user['date_created'] ?>
         </p>
     <?php endforeach; ?>

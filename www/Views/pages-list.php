@@ -2,13 +2,13 @@
 $pages = json_decode($pages ?? '[]', true);
 ?>
 
-<h1>Gestion des pages</h1>
 
-<a href="/admin">Retour au dashboard</a> | <a href="/admin/pages/create">Créer une nouvelle page</a>
+
+
 
 <hr>
 
-<h2>Liste des pages (<?= count($pages) ?>)</h2>
+<h1>Liste des pages (<?= count($pages) ?>)</h1>
 
 <?php if (empty($pages)): ?>
     <p>Aucune page</p>
@@ -22,9 +22,7 @@ $pages = json_decode($pages ?? '[]', true);
             <?php if ($page['updated_at']): ?>
                 Modifié le : <?= $page['updated_at'] ?><br>
             <?php endif; ?>
-            <a href="/admin/pages/edit?id=<?= $page['id'] ?>">Éditer</a>
-            | <a href="/<?= $page['slug'] ?>" target="_blank">Voir</a>
-            | <a href="/admin/pages/delete?id=<?= $page['id'] ?>" onclick="return confirm('Supprimer cette page ?')">Supprimer</a>
+            <a href="/<?= $page['slug'] ?>">Voir</a>
         </p>
         <hr>
     <?php endforeach; ?>

@@ -1,6 +1,6 @@
 <?php
 $errors = json_decode($errors ?? '[]', true);
-$success = ($success ?? 'false') === 'true';
+$success = ($success ?? 'false') == 'true';
 if ($success):
 ?>
     <p>Inscription réussie ! Email de confirmation envoyé.</p>

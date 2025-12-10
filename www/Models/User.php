@@ -1,12 +1,15 @@
 <?php
+
 namespace App\Models;
 
 use App\Core\Database;
 
-class User {
+class User
+{
     private \PDO $pdo;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->pdo = Database::getInstance()->getPdo();
     }
 
@@ -14,7 +17,8 @@ class User {
      * Créer un nouvel utilisateur
      * @return array|false Retourne ['user_id' => int, 'token' => string] ou false en cas d'erreur
      */
-    public function create(string $email, string $password, string $firstname, string $lastname, int $roleId = 2): array {
+    public function create(string $email, string $password, string $firstname, string $lastname, int $roleId = 2): array
+    {
         try {
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             $token = bin2hex(random_bytes(32));
@@ -67,7 +71,8 @@ class User {
     /**
      * Trouver un utilisateur par email
      */
-    public function findByEmail(string $email): ?array {
+    public function findByEmail(string $email): ?array
+    {
         $stmt = $this->pdo->prepare('SELECT * FROM "user" WHERE email = ?');
         $stmt->execute([$email]);
         $result = $stmt->fetch();
@@ -77,7 +82,8 @@ class User {
     /**
      * Trouver un utilisateur par ID
      */
-    public function findById(int $id): ?array {
+    public function findById(int $id): ?array
+    {
         $stmt = $this->pdo->prepare('SELECT * FROM "user" WHERE id = ?');
         $stmt->execute([$id]);
         $result = $stmt->fetch();
@@ -87,7 +93,8 @@ class User {
     /**
      * Vérifier les credentials
      */
-    public function checkCredentials(string $email, string $password): ?array {
+    public function checkCredentials(string $email, string $password): ?array
+    {
         $user = $this->findByEmail($email);
 
         if ($user && password_verify($password, $user['pwd'])) {
@@ -100,7 +107,8 @@ class User {
     /**
      * Activer un compte utilisateur
      */
-    public function activateAccount(string $token): bool {
+    public function activateAccount(string $token): bool
+    {
         try {
             $this->pdo->beginTransaction();
 
@@ -146,7 +154,8 @@ class User {
     /**
      * Générer un token de reset password
      */
-    public function createResetToken(string $email): ?string {
+    public function createResetToken(string $email): ?string
+    {
         $user = $this->findByEmail($email);
         if (!$user) {
             return null;
@@ -180,7 +189,8 @@ class User {
     /**
      * Réinitialiser le mot de passe
      */
-    public function resetPassword(string $token, string $newPassword): bool {
+    public function resetPassword(string $token, string $newPassword): bool
+    {
         try {
             $this->pdo->beginTransaction();
 
@@ -227,13 +237,11 @@ class User {
     /**
      * Récupérer tous les utilisateurs (pour le BO)
      */
-    public function findAll(): array {
+    public function findAll(): array
+    {
         $stmt = $this->pdo->query(
-            'SELECT u.*, STRING_AGG(r.name, \', \') as roles
+            'SELECT u.*
              FROM "user" u
-             LEFT JOIN user_roles ur ON u.id = ur.user_id
-             LEFT JOIN roles r ON ur.role_id = r.id
-             GROUP BY u.id
              ORDER BY u.date_created DESC'
         );
         return $stmt->fetchAll();
@@ -242,40 +250,32 @@ class User {
     /**
      * Mettre à jour un utilisateur
      */
-    public function update(int $id, array $data): bool {
+    public function update(int $id, array $data): bool
+    {
         try {
-            $fields = [];
-            $values = [];
+            $sql = 'UPDATE public."user" 
+            SET firstname = :firstname,
+                lastname = :lastname,
+                email = :email,
+                is_active = :is_active,
+                role_id = :role_id,
+                date_updated = CURRENT_DATE
+            WHERE id = :id';
 
-            if (isset($data['firstname'])) {
-                $fields[] = 'firstname = ?';
-                $values[] = $data['firstname'];
-            }
-            if (isset($data['lastname'])) {
-                $fields[] = 'lastname = ?';
-                $values[] = $data['lastname'];
-            }
-            if (isset($data['email'])) {
-                $fields[] = 'email = ?';
-                $values[] = $data['email'];
-            }
-            if (isset($data['is_active'])) {
-                $fields[] = 'is_active = ?';
-                $values[] = $data['is_active'];
-            }
-            if (isset($data['role_id'])) {
-                $fields[] = 'role_id = ?';
-                $values[] = $data['role_id'];
-            }
-            $fields[] = 'date_updated = CURRENT_DATE';
-            $values[] = $id;
-
-            $sql = 'UPDATE "user" SET ' . implode(', ', $fields) . ' WHERE id = ?';
             $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':firstname', $data['firstname']);
+            $stmt->bindValue(':lastname', $data['lastname']);
+            $stmt->bindValue(':email', $data['email']);
 
-            return $stmt->execute($values);
+            $stmt->bindValue(':is_active', $data['is_active'], \PDO::PARAM_BOOL);
+
+            $stmt->bindValue(':role_id', $data['role_id'], \PDO::PARAM_INT);
+
+            $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+
+            return $stmt->execute();
         } catch (\PDOException $e) {
-            if (DEBUG_MODE) {
+            if (defined('DEBUG_MODE') && DEBUG_MODE) {
                 error_log("Erreur update user: " . $e->getMessage());
             }
             return false;
@@ -285,7 +285,8 @@ class User {
     /**
      * Supprimer un utilisateur
      */
-    public function delete(int $id): bool {
+    public function delete(int $id): bool
+    {
         try {
             $stmt = $this->pdo->prepare('DELETE FROM "user" WHERE id = ?');
             return $stmt->execute([$id]);
@@ -300,7 +301,8 @@ class User {
     /**
      * Vérifier si l'utilisateur a un rôle
      */
-    public function hasRole(int $userId, string $roleName): bool {
+    public function hasRole(int $userId, string $roleName): bool
+    {
         $stmt = $this->pdo->prepare(
             "SELECT COUNT(*) FROM user_roles ur
              JOIN roles r ON ur.role_id = r.id

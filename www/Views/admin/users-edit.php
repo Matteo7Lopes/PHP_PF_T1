@@ -1,10 +1,10 @@
 <?php
 $user = json_decode($user ?? '{}', true);
 $errors = json_decode($errors ?? '[]', true);
-$success = ($success ?? 'false') === 'true';
+$success = ($success ?? 'false') == 'true';
 
 if ($success) {
-    echo "<p>✅ Utilisateur mis à jour avec succès !</p>";
+    echo "<p>Utilisateur mis à jour avec succès !</p>";
 }
 
 if (!empty($errors)) {
@@ -22,13 +22,13 @@ if (!empty($errors)) {
 
 <form method="post">
     <label for="firstname">Prénom :</label>
-    <input type="text" id="firstname" name="firstname" required value="<?= htmlspecialchars($user['firstname'] ?? '') ?>"><br>
+    <input type="text" id="firstname" name="firstname" required value="<?= $user['firstname'] ?? '' ?>"><br>
 
     <label for="lastname">Nom :</label>
-    <input type="text" id="lastname" name="lastname" required value="<?= htmlspecialchars($user['lastname'] ?? '') ?>"><br>
+    <input type="text" id="lastname" name="lastname" required value="<?= $user['lastname'] ?? '' ?>"><br>
 
     <label for="email">Email :</label>
-    <input type="email" id="email" name="email" required value="<?= htmlspecialchars($user['email'] ?? '') ?>"><br>
+    <input type="email" id="email" name="email" required value="<?= $user['email'] ?? '' ?>"><br>
 
     <label for="role_id">Rôle :</label>
     <select id="role_id" name="role_id">
