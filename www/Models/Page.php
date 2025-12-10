@@ -60,7 +60,7 @@ class Page
      */
     public function findBySlug(string $slug): ?array
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM public.pages WHERE slug = :slug AND is_published = true');
+        $stmt = $this->pdo->prepare('SELECT * FROM public.pages WHERE slug = :slug');
         $stmt->execute(['slug' => $slug]);
         $result = $stmt->fetch();
         return $result ?: null;

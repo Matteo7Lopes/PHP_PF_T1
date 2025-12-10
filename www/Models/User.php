@@ -298,17 +298,4 @@ class User
         }
     }
 
-    /**
-     * Vérifier si l'utilisateur a un rôle
-     */
-    public function hasRole(int $userId, string $roleName): bool
-    {
-        $stmt = $this->pdo->prepare(
-            "SELECT COUNT(*) FROM user_roles ur
-             JOIN roles r ON ur.role_id = r.id
-             WHERE ur.user_id = ? AND r.name = ?"
-        );
-        $stmt->execute([$userId, $roleName]);
-        return $stmt->fetchColumn() > 0;
-    }
 }

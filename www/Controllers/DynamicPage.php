@@ -21,7 +21,6 @@ class DynamicPage
     {
         // Chercher la page dans la base de données
         $page = $this->pageModel->findBySlug($slug);
-        
         // Si la page n'existe pas ou n'est pas publiée
         if (!$page) {
             http_response_code(404);
@@ -30,7 +29,11 @@ class DynamicPage
             echo "<p><a href='/'>Retour à l'accueil</a></p>";
             return;
         }
-        
+        if($page["is_published"]){
+            Auth::requireAuth();
+        }else{
+            Auth::requireAdmin();
+        }
         // Afficher la page
         $render = new Render("dynamic-page", "frontoffice");
         $render->assign("page", json_encode($page));

@@ -74,7 +74,6 @@ if(!empty($routes[$requestUri])){
     }
 
     // Charger le controller de pages dynamiques
-    include_once "../Controllers/DynamicPage.php";
     $dynamicController = new \App\Controllers\DynamicPage();
     $dynamicController->show($slug);
 }
