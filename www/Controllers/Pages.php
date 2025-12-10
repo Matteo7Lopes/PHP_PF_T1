@@ -21,7 +21,7 @@ class Pages
     {
         Auth::requireAuth();
 
-        $pages = $this->pageModel->findAll();
+        $pages = $this->pageModel->findPublished();
 
         $render = new Render("pages-list", "frontoffice");
         $render->assign("pages", json_encode($pages));
