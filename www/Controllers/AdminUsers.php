@@ -67,9 +67,9 @@ class AdminUsers
             // Traitement du formulaire
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $data = [
-                    'firstname' => trim($_POST['firstname'] ?? ''),
-                    'lastname' => trim($_POST['lastname'] ?? ''),
-                    'email' => trim($_POST['email'] ?? ''),
+                    'firstname' => strip_tags(trim($_POST['firstname']) ?? ''),
+                    'lastname' => strip_tags(trim($_POST['lastname']) ?? ''),
+                    'email' => strip_tags(trim($_POST['email']) ?? ''),
                     'is_active' => isset($_POST['is_active']),
                     'role_id' => (int)($_POST['role_id'] ?? 2)
                 ];

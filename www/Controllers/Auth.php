@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Core\Render;
@@ -9,7 +10,8 @@ class Auth
 {
     private User $userModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->userModel = new User();
     }
 
@@ -64,7 +66,7 @@ class Auth
         $success = false;
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST'
-            && count($_POST)==5
+            && count($_POST) == 5
             && isset($_POST["firstname"])
             && isset($_POST["lastname"])
             && !empty($_POST["email"])
@@ -72,35 +74,35 @@ class Auth
             && !empty($_POST["pwdConfirm"])
         ) {
 
-            $firstname = ucwords(strtolower(trim($_POST["firstname"])));
-            $lastname = strtoupper(trim($_POST["lastname"]));
-            $email = strtolower(trim($_POST["email"]));
+            $firstname = strip_tags(ucwords(strtolower(trim($_POST["firstname"]))));
+            $lastname = strip_tags(strtoupper(trim($_POST["lastname"])));
+            $email = strip_tags(strtolower(trim($_POST["email"])));
 
 
-            if(strlen($firstname)==1){
-                $errors[]="Le prénom doit faire au moins 2 caractères";
+            if (strlen($firstname) == 1) {
+                $errors[] = "Le prénom doit faire au moins 2 caractères";
             }
-            if(strlen($lastname)==1){
-                $errors[]="Le nom doit faire au moins 2 caractères";
+            if (strlen($lastname) == 1) {
+                $errors[] = "Le nom doit faire au moins 2 caractères";
             }
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                $errors[]="Le format de l'email est invalide";
-            }elseif(!empty($this->userModel->findByEmail($email))){
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = "Le format de l'email est invalide";
+            } elseif (!empty($this->userModel->findByEmail($email))) {
                 $result = $this->userModel->findByEmail($email);
-                if(!empty($result)){
-                    $errors[]="L'email existe déjà";
+                if (!empty($result)) {
+                    $errors[] = "L'email existe déjà";
                 }
             }
-            if(strlen($_POST["pwd"])<8 ||
+            if (strlen($_POST["pwd"]) < 8 ||
                 !preg_match('#[A-Z]#', $_POST["pwd"]) ||
                 !preg_match('#[a-z]#', $_POST["pwd"]) ||
                 !preg_match('#[0-9]#', $_POST["pwd"]) ||
                 !preg_match("#[^a-zA-Z0-9\s]#", $_POST["pwd"])
-            ){
-                $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule, un chiffre et un caractère spécial";
+            ) {
+                $errors[] = "Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule, un chiffre et un caractère spécial";
             }
-            if($_POST["pwd"] != $_POST["pwdConfirm"]){
-                $errors[]="Le mot de passe de confirmation ne correspond pas";
+            if ($_POST["pwd"] != $_POST["pwdConfirm"]) {
+                $errors[] = "Le mot de passe de confirmation ne correspond pas";
             }
 
             // Créer l'utilisateur
@@ -280,17 +282,17 @@ class Auth
             $password = $_POST['pwd'] ?? '';
             $confirmPassword = $_POST['pwdConfirm'] ?? '';
 
-            if(strlen($password)<8 ||
+            if (strlen($password) < 8 ||
                 !preg_match('#[A-Z]#', $password) ||
                 !preg_match('#[a-z]#', $password) ||
-                !preg_match('#[0-9]#', $password)||
+                !preg_match('#[0-9]#', $password) ||
                 !preg_match("#[^a-zA-Z0-9\s]#", $password)
-            ){
-                $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule, un chiffre et un caractère spécial";
+            ) {
+                $errors[] = "Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule, un chiffre et un caractère spécial";
             }
 
-            if($password != $confirmPassword){
-                $errors[]="Le mot de passe de confirmation ne correspond pas";
+            if ($password != $confirmPassword) {
+                $errors[] = "Le mot de passe de confirmation ne correspond pas";
             }
 
             if (empty($errors)) {

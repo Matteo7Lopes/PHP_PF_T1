@@ -114,7 +114,7 @@ class AdminPages
 
             $data = [
                 'title' => strip_tags(trim($_POST['title'])),
-                'slug' => urlencode(strtolower(trim($_POST["slug"]))),
+                'slug' => urlencode(str_replace("/", "-",strtolower(trim($_POST["slug"])))),
                 'content' => strip_tags(trim($_POST['content'])),
                 'meta_description' => trim($_POST['meta_description']),
                 'is_published' => isset($_POST['is_published'])

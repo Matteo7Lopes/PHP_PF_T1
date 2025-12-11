@@ -155,6 +155,7 @@ class Page
     {
         // Convertir en slug
         $slug = strtolower(trim($title));
+
         $slug = urlencode($slug);
 
         // Vérifier l'unicité
