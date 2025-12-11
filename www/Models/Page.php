@@ -60,9 +60,13 @@ class Page
      */
     public function findBySlug(string $slug): ?array
     {
+
         $stmt = $this->pdo->prepare('SELECT * FROM public.pages WHERE slug = :slug');
         $stmt->execute(['slug' => $slug]);
+
         $result = $stmt->fetch();
+
+
         return $result ?: null;
     }
 
@@ -151,7 +155,7 @@ class Page
     {
         // Convertir en slug
         $slug = strtolower(trim($title));
-        $slug = preg_replace('/[^a-zA-Z0-9]/', '', $slug);
+        $slug = urlencode($slug);
 
         // Vérifier l'unicité
         $originalSlug = $slug;

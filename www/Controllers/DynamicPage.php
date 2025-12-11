@@ -19,8 +19,10 @@ class DynamicPage
      */
     public function show(string $slug): void
     {
+
         // Chercher la page dans la base de données
         $page = $this->pageModel->findBySlug($slug);
+
         // Si la page n'existe pas ou n'est pas publiée
         if (!$page) {
             http_response_code(404);

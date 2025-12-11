@@ -38,6 +38,7 @@ class AdminUsers
         $userId = $_GET['id'] ?? null;
         $errors = [];
         $success = false;
+
         if (!$userId) {
             die("ID utilisateur manquant");
         }
@@ -47,6 +48,7 @@ class AdminUsers
         if (!$user) {
             die("Utilisateur introuvable");
         }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST'
             && (count($_POST) == 4 || count($_POST) == 5)
             && isset($_POST["firstname"])
@@ -54,6 +56,12 @@ class AdminUsers
             && isset($_POST["email"])
             && isset($_POST["role_id"])) {
 
+            if ($user["role_id"] == 1 && $user["role_id"] != $_POST["role_id"]) {
+                $countAdmin = $this->userModel->adminCheck();
+                if ($countAdmin[0] <= 1) {
+                    $errors[] = "vous êtes le dernier administrateur";
+                }
+            }
 
 
             // Traitement du formulaire
@@ -87,19 +95,23 @@ class AdminUsers
                     }
                 }
             }
-        }
 
-        $render = new Render("admin/users-edit", "backoffice");
-        $render->assign("user", json_encode($user));
-        $render->assign("errors", json_encode($errors));
-        $render->assign("success", $success ? "true" : "false");
-        $render->render();
+        }
+            $render = new Render("admin/users-edit", "backoffice");
+            $render->assign("user", json_encode($user));
+            $render->assign("errors", json_encode($errors));
+            $render->assign("success", $success ? "true" : "false");
+            $render->render();
+
+
     }
+
 
     /**
      * Supprimer un utilisateur
      */
-    public function delete(): void
+    public
+    function delete(): void
     {
         Auth::requireAdmin();
 

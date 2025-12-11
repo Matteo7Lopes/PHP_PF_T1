@@ -17,6 +17,7 @@ if (!empty($errors)) {
 <form method="post">
     <label for="title">Titre :</label>
     <input type="text" id="title" name="title" required value="<?= $_POST['title'] ?? '' ?>"><br>
+    <p>l'URL de la page va devenir le nom de la page sans les caractères spéciaux </p><br>
 
     <label for="content">Contenu :</label><br>
     <textarea id="content" name="content" rows="10" cols="50"><?= $_POST['content'] ?? '' ?></textarea><br>

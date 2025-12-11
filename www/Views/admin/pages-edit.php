@@ -25,7 +25,7 @@ if (!empty($errors)) {
     <input type="text" id="title" name="title" required value="<?= $page['title'] ?? '' ?>"><br>
 
     <label for="slug">Slug (URL) :</label>
-    <input type="text" id="slug" name="slug" required value="<?= $page['slug'] ?? '' ?>"><br>
+    <input type="text" id="slug" name="slug" required value="<?= urldecode($page['slug']) ?? '' ?>"><br>
 
     <label for="content">Contenu :</label><br>
     <textarea id="content" name="content" rows="10" cols="50"><?= $page['content'] ?? '' ?></textarea><br>

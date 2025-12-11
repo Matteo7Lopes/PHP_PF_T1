@@ -16,13 +16,13 @@ $pages = json_decode($pages ?? '[]', true);
     <?php foreach ($pages as $page): ?>
         <p>
             <strong><?= $page['title'] ?></strong><br>
-            Slug : /<?= $page['slug'] ?><br>
+            Slug : /<?= urldecode($page['slug']) ?><br>
             Statut : <?= $page['is_published'] ? 'Publié' : 'Brouillon' ?><br>
             Créé le : <?= $page['created_at'] ?><br>
             <?php if ($page['updated_at']): ?>
                 Modifié le : <?= $page['updated_at'] ?><br>
             <?php endif; ?>
-            <a href="/<?= $page['slug'] ?>">Voir</a>
+            <a href="/<?= urldecode($page['slug']) ?>">Voir</a>
         </p>
         <hr>
     <?php endforeach; ?>

@@ -43,8 +43,8 @@ class AdminPages
             && isset($_POST["content"])
             && isset($_POST["meta_description"])) {
 
-            $title = trim($_POST['title'] ?? '');
-            $content = trim($_POST['content'] ?? '');
+            $title = strip_tags(trim($_POST['title'] ?? ''));
+            $content = strip_tags(trim($_POST['content'] ?? ''));
             $metaDescription = trim($_POST['meta_description'] ?? '');
             $isPublished = isset($_POST['is_published']);
             $slug = null;
@@ -54,9 +54,6 @@ class AdminPages
             } else {
                 // Générer le slug
                 $slug = $this->pageModel->generateSlug($title);
-            }
-            if (empty($slug)) {
-                $errors[] = "le titre ne doit pas être composé uniquement de caractères spéciaux ";
             }
             if (empty($errors)) {
 
@@ -97,7 +94,6 @@ class AdminPages
         $errors = [];
         $success = false;
 
-
         if (!$pageId) {
             die("ID page manquant");
         }
@@ -114,41 +110,38 @@ class AdminPages
             && isset($_POST["content"])
             && isset($_POST["meta_description"])) {
 
-            $slug = preg_replace('/[^a-zA-Z0-9]/', '',$_POST["slug"]);
             // Traitement du formulaire
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $data = [
-                    'title' => trim($_POST['title']),
-                    'slug' => $slug,
-                    'content' => trim($_POST['content']),
-                    'meta_description' => trim($_POST['meta_description']),
-                    'is_published' => isset($_POST['is_published'])
-                ];
 
-                // Validation
-                if (empty($data['title'])) {
-                    $errors[] = "Le titre est requis";
-                }
-                if (empty($data['slug'])) {
-                    $errors[] = "Le slug est requis et ne doit pas être composé uniquement de caractères spéciaux";
-                }
-                if (!empty($this->pageModel->findAllBySlug($data['slug']))) {
-                    if ($data['slug'] != $page["slug"]) {
-                        $errors[] = "le slug exist deja";
-                    }
-                }
+            $data = [
+                'title' => strip_tags(trim($_POST['title'])),
+                'slug' => urlencode(strtolower(trim($_POST["slug"]))),
+                'content' => strip_tags(trim($_POST['content'])),
+                'meta_description' => trim($_POST['meta_description']),
+                'is_published' => isset($_POST['is_published'])
+            ];
 
-                // Mise à jour
-                if (empty($errors)) {
-                    if ($this->pageModel->update($pageId, $data)) {
-                        $success = true;
-                        $page = $this->pageModel->findById($pageId); // Recharger
-                    } else {
-                        $errors[] = "Erreur lors de la mise à jour";
-                    }
+            // Validation
+            if (empty($data['title'])) {
+                $errors[] = "Le titre est requis";
+            }
+            if (empty($data['slug'])) {
+                $errors[] = "Le slug est requis et ne doit pas être composé uniquement de caractères spéciaux";
+            }
+            if (!empty($this->pageModel->findAllBySlug($data['slug']))) {
+                if ($data['slug'] != $page["slug"]) {
+                    $errors[] = "le slug exist deja";
                 }
             }
 
+            // Mise à jour
+            if (empty($errors)) {
+                if ($this->pageModel->update($pageId, $data)) {
+                    $success = true;
+                    $page = $this->pageModel->findById($pageId); // Recharger
+                } else {
+                    $errors[] = "Erreur lors de la mise à jour";
+                }
+            }
         }
 
         $render = new Render("admin/pages-edit", "backoffice");

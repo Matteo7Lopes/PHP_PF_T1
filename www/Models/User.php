@@ -90,6 +90,14 @@ class User
         return $result ?: null;
     }
 
+    public function adminCheck(): array
+    {
+        $stmt = $this->pdo->prepare('SELECT count(*) FROM "user" WHERE role_id = 1');
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result ;
+    }
+
     /**
      * Vérifier les credentials
      */

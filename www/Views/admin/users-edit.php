@@ -32,14 +32,16 @@ if (!empty($errors)) {
 
     <label for="role_id">Rôle :</label>
     <select id="role_id" name="role_id">
-        <option value="2" <?= ($user['role_id'] ?? 2) == 2 ? 'selected' : '' ?>>User</option>
-        <option value="1" <?= ($user['role_id'] ?? 2) == 1 ? 'selected' : '' ?>>Admin</option>
+        <option value="2" <?= ($user['role_id']) == 2 ? 'selected' : '' ?>>User</option>
+        <option value="1" <?= ($user['role_id']) == 1 ? 'selected' : '' ?>>Admin</option>
     </select><br>
+    <?php if ($user['role_id'] == 2):{ ?>
+        <label>
+            <input type="checkbox" name="is_active" <?= ($user['is_active'] ?? false) ? 'checked' : '' ?>>
+            Compte actif
+        </label><br>
+    <?php }endif ?>
 
-    <label>
-        <input type="checkbox" name="is_active" <?= ($user['is_active'] ?? false) ? 'checked' : '' ?>>
-        Compte actif
-    </label><br>
 
     <button type="submit">Mettre à jour</button>
 </form>

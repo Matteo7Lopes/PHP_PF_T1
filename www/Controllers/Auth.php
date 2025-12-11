@@ -221,6 +221,10 @@ class Auth
      */
     public function forgotPassword(): void
     {
+
+        // Rediriger si déjà connecté
+        self::requireGuest();
+
         $errors = [];
         $success = false;
 
@@ -260,6 +264,10 @@ class Auth
      */
     public function resetPassword(): void
     {
+
+        // Rediriger si déjà connecté
+        self::requireGuest();
+
         $token = $_GET['token'] ?? '';
         $errors = [];
         $success = false;
@@ -275,9 +283,10 @@ class Auth
             if(strlen($password)<8 ||
                 !preg_match('#[A-Z]#', $password) ||
                 !preg_match('#[a-z]#', $password) ||
-                !preg_match('#[0-9]#', $password)
+                !preg_match('#[0-9]#', $password)||
+                !preg_match("#[^a-zA-Z0-9\s]#", $password)
             ){
-                $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule et un chiffres";
+                $errors[]="Le mot de passe doit faire au moins 8 caractères avec une minuscule, une majuscule, un chiffre et un caractère spécial";
             }
 
             if($password != $confirmPassword){

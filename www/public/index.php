@@ -75,5 +75,11 @@ if(!empty($routes[$requestUri])){
 
     // Charger le controller de pages dynamiques
     $dynamicController = new \App\Controllers\DynamicPage();
+
+    // Normaliser le slug de l'URL pour correspondre au format stocké en BDD (urlencode() convertit les espaces en +)
+    // Le serveur web peut avoir décodé une partie de l'URI. Nous décodons et ré-encodons pour garantir le format BDD.
+
+    $slug = urlencode(urldecode($slug));
+
     $dynamicController->show($slug);
 }
